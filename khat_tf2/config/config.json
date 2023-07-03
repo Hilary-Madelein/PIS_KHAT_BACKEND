@@ -1,0 +1,26 @@
+{
+    "development": {
+        "username": "desarrollo",
+        "password": "desarrollo",
+        "database": "tf",
+        "host"    : "127.0.0.1",
+        "dialect" : "mysql",
+        "operatorAliases": false
+    },
+    "staging": {
+        "username": "desarrollo",
+        "password": "desarrollo985",
+        "database": "carro",
+        "host"    : "192.168.1.190",
+        "dialect" : "mysql",
+        "operatorAliases": false
+    },
+    "production": {
+        "username": "production",
+        "password": "desarrollo123@",
+        "database": "carro",
+        "host"    : "192.168.1.200",
+        "dialect" : "mysql",
+        "operatorAliases": false
+    }
+}
