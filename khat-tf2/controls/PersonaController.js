@@ -21,8 +21,38 @@ class PersonaController {
         res.json({ msg: 'OK!', code: 200, info: listar });
     }
 
+    async listarDadosBaja(req, res) {
+        const listar = await persona.findAll({
+            where: {
+                estado: false
+            },
+            attributes: ['apellidos', 'nombres', 'external_id', 'direccion', 'identificacion', 'tipo_identificacion', 'fecha_nacimiento', 'telefono', 'direccion'],
+            include: {
+                model: cuenta,
+                as: 'cuenta',
+                attributes: ['correo']
+            },            
+        });
+        res.json({ msg: 'OK!', code: 200, info: listar });
+    }
+
+    async listarActivos(req, res) {
+        
+        const listar = await persona.findAll({
+            where: { estado: true },
+            attributes: ['apellidos', 'nombres', 'external_id', 'direccion', 'identificacion', 'tipo_identificacion', 'fecha_nacimiento', 'telefono', 'direccion'],
+            include: {
+                model: cuenta,
+                as: 'cuenta',
+                attributes: ['correo']
+            }
+        });
+        res.json({ msg: 'OK!', code: 200, info: listar });
+    }
+    
+    
+
     async obtener(req, res) {
-        console.log("RRRRRRRRRRR", req.params);
         const external = req.params.external;
         var listar = await persona.findOne({
             where: { external_id: external },

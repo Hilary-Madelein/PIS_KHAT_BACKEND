@@ -19,6 +19,8 @@ const AsignaturaController = require('../controls/AsignaturaController');
 var asignaturaController = new AsignaturaController();
 const CicloController = require('../controls/CicloController');
 var cicloController = new CicloController();
+const PracticaController  = require('../controls/PracticaController');
+var practicaController  = new PracticaController();
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -73,6 +75,8 @@ router.post('/sesion', [
 //------Personas
 router.get('/roles', rolController.listar);
 router.get('/personas', personaController.listar);
+router.get('/personasDadasBaja', personaController.listarDadosBaja);
+router.get('/personasActivas', personaController.listarActivos);
 router.get('/listadoregistro', personaRolController.listar); 
 router.get('/personas/obtener/:external', personaController.obtener);
 
@@ -116,5 +120,12 @@ router.post('/asignatura/guardar', asignaturaController.guardar);
 router.post('/asignatura/modificar', asignaturaController.modificar);
 router.get('/asignatura/listar', asignaturaController.listar);
 router.get('/asignatura/obtener/:external', asignaturaController.obtener);
+
+///Practicas
+router.post('/practica/guardar', practicaController.guardar);
+router.post('/practica/modificar', practicaController.modificar);
+router.get('/practica/listar', practicaController.listar);
+router.get('/practica/listarNombres', practicaController.listarNombre);
+router.get('/practica/obtener/:external', practicaController.obtener);
 
 module.exports = router;  
