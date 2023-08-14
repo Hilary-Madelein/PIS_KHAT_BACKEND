@@ -13,9 +13,9 @@ class CicloController {
     }
 
     async obtener(req, res) {
-        const external = req.params.external;
+        const external_id = req.body.external_id;
         var listar = await ciclo.findOne({
-            where: { external_id: external },
+            where: { external_id: external_id},
             attributes: ['external_id', 'estado', 'numero_ciclo'],
         });
         if (listar === null) {
@@ -36,7 +36,7 @@ class CicloController {
                 await ciclo.create(data);
                 await transaction.commit();
                 res.json({
-                    msg: "SE HAN REGISTRADO LOS DATOS DEL CICLO",
+                    msg: "Se han registrado los datos del ciclo",
                     code: 200
                 });
 
@@ -54,33 +54,5 @@ class CicloController {
         }
     }
 
-    async modificar(req, res) {
-        var cil = await ciclo.findOne({ where: { external_id: req.body.external } });
-        if (cil === null) {
-            res.status(400);
-            res.json({
-                msg: "NO EXISTEN REGISTROS",
-                code: 400
-            });
-        } else {
-            var uuid = require('uuid');
-            cil.numero_ciclo = req.body.numero_ciclo;
-            cil.external_id = uuid.v4();
-            var result = await per.save();
-            if (result === null) {
-                res.status(400);
-                res.json({
-                    msg: "NO SE HAN MODIFICADO LOS DATOS DEL CICLO",
-                    code: 400
-                });
-            } else {
-                res.status(200);
-                res.json({
-                    msg: "SE HAN MODIFICADO LOS DATOS DEL CICLO CORRECTAMENTE",
-                    code: 200
-                });
-            }
-        }
-    }
 }
 module.exports = CicloController;

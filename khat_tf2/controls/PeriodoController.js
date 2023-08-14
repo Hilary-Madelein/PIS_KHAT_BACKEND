@@ -7,16 +7,35 @@ class PeriodoController {
 
     async listar(req, res) {
         var listar = await periodo.findAll({
-            attributes: ['external_id', 'estado', 'mes_comienzo', 'mes_culminacion', 'anio_periodo']
+            attributes: ['external_id', 'estado', 'comienzo', 'culminacion']
+        });
+        res.json({ msg: 'OK!', code: 200, info: listar });
+    }
+
+    async listar_activo(req, res) {
+        var listar = await periodo.findAll({
+            where: { estado: true },
+            attributes: ['external_id', 'comienzo', 'culminacion']
+        });
+        if (listar === null) {
+            listar = {};
+        }
+        res.json({ msg: 'OK!', code: 200, info: listar });
+    }
+
+    async listar_desactivo(req, res) {
+        var listar = await periodo.findAll({
+            where: { estado: false },
+            attributes: ['external_id', 'comienzo', 'culminacion']
         });
         res.json({ msg: 'OK!', code: 200, info: listar });
     }
 
     async obtener(req, res) {
-        const external = req.params.external;
+        const external_id = req.body.external_id;
         var listar = await periodo.findOne({
-            where: { external_id: external },
-            attributes: ['external_id', 'estado', 'mes_comienzo', 'mes_culminacion', 'anio_periodo'],
+            where: { external_id: external_id},
+            attributes: ['external_id', 'estado', 'comienzo', 'culminacion'],
         });
         if (listar === null) {
             listar = {};
@@ -27,18 +46,18 @@ class PeriodoController {
 
     async guardar(req, res) {
         let errors = validationResult(req);
+        console.log('SSS', errors);
         if (errors.isEmpty()) {
             var data = {
-                mes_culminacion: req.body.mes_culminacion,
-                mes_comienzo: req.body.mes_comienzo,
-                anio_periodo: req.body.anio_periodo
+                comienzo: req.body.comienzo,
+                culminacion: req.body.culminacion
             }
             let transaction = await models.sequelize.transaction();
             try {
                 await periodo.create(data);
                 await transaction.commit();
                 res.json({
-                    msg: "SE HAN REGISTRADO LOS DATOS DEL PERIODO",
+                    msg: "Se han registrado los datos del periodo",
                     code: 200
                 });
 
@@ -51,40 +70,42 @@ class PeriodoController {
                 }
             }
         } else {
-            res.status(400);
-            res.json({ msg: "Datos no encontrados", code: 400 });
+            if (errors.errors && errors.errors[0].msg) {
+                res.json({ msg: errors.errors[0].msg, code: 200 });
+            } else {
+                res.json({ msg: errors.errors[1].msg, code: 200 });
+            }
         }
     }
 
-    async modificar(req, res) {
-        var per = await periodo.findOne({ where: { external_id: req.body.external } });
-        if (per === null) {
+    async cambiarEstado(req, res) {
+        var peri = await periodo.findOne({ where: { external_id: req.body.external_id} });
+        if (peri === null) {
             res.status(400);
             res.json({
-                msg: "NO EXISTEN REGISTROS",
-                code: 400
-            });
-        } else {
+                msg: "No existe registro del periodo",
+                code: 400 
+            });  
+        } else { 
             var uuid = require('uuid');
-            per.mes_comienzo = req.body.mes_comienzo;
-            per.mes_culminacion = req.body.mes_culminacion;
-            per.anio_periodo = req.body.anio_periodo;
-            per.external_id = uuid.v4();
-            var result = await per.save();
+            peri.estado = req.body.estado;
+            peri.external_id = uuid.v4();
+            var result = await peri.save();
             if (result === null) {
                 res.status(400);
                 res.json({
-                    msg: "NO SE HAN MODIFICADO LOS DATOS DEL PERIODO",
+                    msg: "No se ha modificado el estado del periodo",
                     code: 400
                 });
             } else {
                 res.status(200);
                 res.json({
-                    msg: "SE HAN MODIFICADO LOS DATOS DEL PERIODO CORRECTAMENTE",
+                    msg: "Se ha cambiado el estado del periodo con exito",
                     code: 200
                 });
             }
         }
     }
+  
 }
 module.exports = PeriodoController;
