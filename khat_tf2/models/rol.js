@@ -8,7 +8,6 @@ module.exports = (sequelize, DataTypes) => {
 
     rol.associate = function (models) {
         rol.hasMany(models.persona_rol, {foreignKey: 'id_rol',as:'persona_rol'});
-        rol.hasMany(models.rol_funcion, {foreignKey: 'id_rol',as:'rol_funcion'});
     }
 
     return rol;    

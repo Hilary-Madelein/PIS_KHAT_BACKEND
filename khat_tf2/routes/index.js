@@ -22,5 +22,4 @@ router.get('/privado/:external', function(req, res, next) {
     res.send("Llave incorrecta!");
   }
 });
-
 module.exports = router;
