@@ -1,74 +1,110 @@
-'use strict';
-const { body, validationResult, check } = require('express-validator');
-var models = require('../models/');
-var persona = models.persona;
+var models = require('../models')
 var cuenta = models.cuenta;
-const bcypt = require('bcrypt');
+
+const { validationResult } = require('express-validator');
+
+const bcrypt = require('bcrypt');
+const saltRounds = 8;
+
 let jwt = require('jsonwebtoken');
 
 class CuentaController {
 
     async sesion(req, res) {
-        let errors = validationResult(req);
-        if (errors.isEmpty()) {
+
+        try {
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                return res.status(400).json({
+                    msg: "FALTAN DATOS",
+                    code: 400,
+                    errors: errors.array()
+                });
+            }
+            var login = await cuenta.findOne({
+                where: {
+                    correo: req.body.correo
+                },
+                include: [{
+                    model: models.persona,
+                    as: "persona",
+                    include: [{
+                        model: models.persona_rol,
+                        as: "persona_rol",
+                        include: [{
+                            model: models.rol,
+                            as: "rol"
+                        }]
+                    }]
+                }]
+            });
+
+            if (login === null)
+                return res.status(400).json({
+                    msg: "Cuenta no encontrada",
+                    code: 400
+                })
+
+            var esClaveValida = function (clave, claveUser) {
+                return bcrypt.compareSync(claveUser, clave);
+            }
             
-            var login = await cuenta.findOne({ 
-                
-                where: { correo: req.body.correo},
-                include: {
-                    model: persona,
-                    as: 'persona',
-                    attributes: ['apellidos', 'nombres']
-                } });
-            if (login === null) {
-                res.status(400);
-                res.json({
-                    msg: "CUENTA NO ENCONTRADA",
+            if (!login.estado) {
+                return res.status(400).json({
+                    msg: "Cuenta desactivada",
+                    code: 400
+                });
+            }
+            if (esClaveValida(login.clave, req.body.clave)) {
+                const tokenData = {
+                    external: login.external_id,
+                    email: login.correo,
+                    check: true
+                };
+
+                require('dotenv').config();
+                const llave = process.env.KEY;
+                const token = jwt.sign(
+                    tokenData,
+                    llave,
+                    {
+                        expiresIn: '12h'
+                    });
+                return res.status(200).json({
+                    msg: "Bievenido " + login.persona.nombres,
+                    info: {
+                        token: token,
+                        user: {
+                            correo: login.correo,
+                            nombres: login.persona.nombres,
+                            apellidos: login.persona.apellidos,
+                            user: login.persona,
+                            rol: login.persona.persona_rol[0].rol.tipo
+                        },
+                    },
+                    code: 200
+                })
+            } else {
+                return res.status(401).json({
+                    msg: "Clave incorrecta",
+                    code: 401
+                })
+            }
+
+        } catch (error) {
+            console.log(error);
+            if (error.errors && error.errors[0].message) {
+                return res.status(400).json({
+                    msg: error.errors[0].message,
                     code: 400
                 });
             } else {
-                res.status(200);
-                var isClaveValida = function (clave, claveUser) {
-                    return bcypt.compareSync(claveUser, clave);
-                }
-
-                if (login.estado) {
-                    if (isClaveValida(login.clave, req.body.clave)) { //login.clave---BD //req.body.clave---lo que manda el correo
-                        const tokenData = {
-                            external: login.external_id,
-                            correo: login.correo,
-                            check: true
-                        };
-                        require('dotenv').config();
-                        const llave = process.env.KEY;
-                        const token = jwt.sign(tokenData, llave, {
-                            expiresIn: '12h'
-                        });
-                        res.json({
-                            msg: "OK!",
-                            token: token,
-                            user: login.persona.nombres + ' '+login.persona.apellidos,
-                            correo: login.correo,
-                            code: 200
-                        });
-                    } else {
-                        res.json({
-                            msg: "CLAVE INCORRECTA",
-                            code: 201
-                        });
-                    }
-                } else {
-                    res.json({
-                        msg: "CUENTA DESACTIVADA",
-                        code: 201
-                    });
-                }
+                return res.status(400).json({
+                    msg: "Ha ocurrido un error en el servidor",
+                    code: 400
+                });
             }
-        } else {
-            res.status(400);
-            res.json({ msg: "Datos faltantes", code: 400, errors: errors });
         }
     }
-
 }
 module.exports = CuentaController;
