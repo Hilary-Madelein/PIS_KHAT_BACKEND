@@ -114,6 +114,50 @@ Antes de ejecutar el proyecto, asegúrate de configurar la base de datos. Sigue 
     (UUID(), 1, 9, NOW(), NOW()),
     (UUID(), 1, 10, NOW(), NOW());
 
+    --Insertar asignaturas
+    INSERT INTO asignatura (external_id, estado, nombre, createdAt, updatedAt, id_ciclo) VALUES
+    (UUID(), 1, 'Introducción a la Programación', NOW(), NOW(), 1),
+    (UUID(), 1, 'Estructuras de Datos', NOW(), NOW(), 1),
+    (UUID(), 1, 'Fundamentos de Computación', NOW(), NOW(), 1),
+    (UUID(), 1, 'Matemáticas Discretas', NOW(), NOW(), 1),
+    (UUID(), 1, 'Inglés Técnico', NOW(), NOW(), 1),
+    (UUID(), 1, 'Laboratorio de Programación', NOW(), NOW(), 1),
+
+    (UUID(), 1, 'Algoritmos y Complejidad', NOW(), NOW(), 2),
+    (UUID(), 1, 'Base de Datos', NOW(), NOW(), 2),
+    (UUID(), 1, 'Sistemas Operativos', NOW(), NOW(), 2),
+    (UUID(), 1, 'Programación Orientada a Objetos', NOW(), NOW(), 2),
+    (UUID(), 1, 'Redes de Computadoras', NOW(), NOW(), 2),
+    (UUID(), 1, 'Lenguajes de Programación', NOW(), NOW(), 2),
+
+    (UUID(), 1, 'Inteligencia Artificial', NOW(), NOW(), 3),
+    (UUID(), 1, 'Teoría de la Computación', NOW(), NOW(), 3),
+    (UUID(), 1, 'Diseño y Análisis de Algoritmos', NOW(), NOW(), 3),
+    (UUID(), 1, 'Sistemas Distribuidos', NOW(), NOW(), 3),
+    (UUID(), 1, 'Seguridad Informática', NOW(), NOW(), 3),
+    (UUID(), 1, 'Proyecto de Software', NOW(), NOW(), 3),
+
+    (UUID(), 1, 'Desarrollo Web', NOW(), NOW(), 4),
+    (UUID(), 1, 'Computación Gráfica', NOW(), NOW(), 4),
+    (UUID(), 1, 'Ingeniería de Software', NOW(), NOW(), 4),
+    (UUID(), 1, 'Bases de Datos Avanzadas', NOW(), NOW(), 4),
+    (UUID(), 1, 'Análisis y Diseño de Sistemas', NOW(), NOW(), 4),
+    (UUID(), 1, 'Economía de la Información', NOW(), NOW(), 4),
+
+    (UUID(), 1, 'Minería de Datos', NOW(), NOW(), 5),
+    (UUID(), 1, 'Computación Cuántica', NOW(), NOW(), 5),
+    (UUID(), 1, 'Big Data Analytics', NOW(), NOW(), 5),
+    (UUID(), 1, 'Computación Móvil', NOW(), NOW(), 5),
+    (UUID(), 1, 'Realidad Virtual y Aumentada', NOW(), NOW(), 5),
+    (UUID(), 1, 'Ética en la Tecnología', NOW(), NOW(), 5),
+
+    (UUID(), 1, 'Proyecto de Grado', NOW(), NOW(), 6),
+    (UUID(), 1, 'Práctica Profesional', NOW(), NOW(), 6),
+    (UUID(), 1, 'Seminario de Investigación', NOW(), NOW(), 6),
+    (UUID(), 1, 'Gestión de Proyectos Tecnológicos', NOW(), NOW(), 6),
+    (UUID(), 1, 'Tecnologías Emergentes', NOW(), NOW(), 6),
+    (UUID(), 1, 'Emprendimiento Tecnológico', NOW(), NOW(), 6);
+
     COMMIT;
     ```
 
