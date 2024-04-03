@@ -118,6 +118,15 @@ Antes de ejecutar el proyecto, asegúrate de configurar la base de datos. Sigue 
     ```
 
 Una vez completados estos pasos, la base de datos estará configurada correctamente para su correcto funcionamiento.
+### Cuentas de Acceso
+
+| Correo               | Contraseña | Rol           |
+|----------------------|------------|---------------|
+| ejemplo1@example.com | clave123   | Administrador |
+| ejemplo2@example.com | clave456   | Estudiante    |
+| ejemplo3@example.com | clave789   | Docente       |
+
+Podrás acceder al sistema utilizando las cuentas proporcionadas.
 
 ¡Ahora estás listo para utilizar el backend de KHAT-TF! Si tienes alguna pregunta o encuentras algún problema, no dudes en comunicarte con el equipo de desarrollo.
 
