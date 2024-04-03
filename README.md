@@ -172,6 +172,8 @@ Una vez completados estos pasos, la base de datos estará configurada correctame
 
 Podrás acceder al sistema utilizando las cuentas proporcionadas.
 
+El frontend del proyecto se encuentra en https://github.com/KBGR55/KHAT-TF.git.
+
 ¡Ahora estás listo para utilizar el backend de KHAT-TF! Si tienes alguna pregunta o encuentras algún problema, no dudes en comunicarte con el equipo de desarrollo.
 
 ¡Disfruta trabajando con KHAT-TF! 🚀
